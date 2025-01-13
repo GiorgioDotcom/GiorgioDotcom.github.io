@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Metadati del documento -->
+  <meta charset="UTF-8"> <!-- Codifica dei caratteri -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Design responsivo -->
+  <meta name="description" content="Contact Giorgio Giaffreda"> <!-- Descrizione della pagina per SEO -->
+  <title>Contact - Giorgio Giaffreda</title> <!-- Titolo della pagina -->
+  <link rel="stylesheet" href="css/style.css"> <!-- Collegamento al file CSS per gli stili -->
+</head>
+<body>
+<header>
+  <!-- Intestazione con menu di navigazione -->
+  <nav>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="resume.html">Resume</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+  <section id="contact">
+    <!-- Titolo della sezione di contatto -->
+    <h2>Contact Me</h2>
+
+    <!-- Modulo di contatto -->
+    <form id="contactForm">
+      <!-- Campo per il nome -->
+      <input type="text" id="name" name="name" placeholder="Your Name" required>
+
+      <!-- Campo per l'email -->
+      <input type="email" id="email" name="email" placeholder="Your Email" required>
+
+      <!-- Campo per il messaggio -->
+      <textarea id="message" name="message" placeholder="Your Message" required></textarea>
+
+      <!-- Pulsante di invio -->
+      <button type="submit">Send</button>
+    </form>
+
+    <!-- Messaggio di risposta dopo l'invio -->
+    <div id="responseMessage"></div>
+
+    <hr> <!-- Linea di separazione -->
+
+    <!-- Collegamenti ai social -->
+    <div class="social-links">
+      <h3>Connect with me:</h3>
+      <!-- LinkedIn -->
+      <a href="https://www.linkedin.com/in/giorgio-giaffreda/" target="_blank" aria-label="LinkedIn">
+        <img src="img/linkedin.png" alt="LinkedIn"> <!-- Immagine per LinkedIn -->
+      </a>
+      <!-- GitHub -->
+      <a href="https://github.com/GiorgioDotcom" target="_blank" aria-label="GitHub">
+        <img src="img/github.png" alt="GitHub"> <!-- Immagine per GitHub -->
+      </a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <!-- Piè di pagina -->
+  <p>&copy; 2024 Giorgio Giaffreda. All Rights Reserved.</p>
+</footer>
+
+<!-- Collegamento al file JavaScript per gestire il modulo di contatto. (Nessuna gestione backend implementata. Valutarne l'inserimento)-->
+<script src="js/contact.js"></script>
+</body>
+</html>
