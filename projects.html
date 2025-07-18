@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Projects Portfolio - Giorgio Giaffreda">
+  <title>Projects - Giorgio Giaffreda</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Stili specifici per la sezione progetti - Tema Premium Scuro */
+    .projects-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #fafafa;
+      min-height: 100vh;
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 25px;
+      margin-top: 30px;
+    }
+
+    .project-card {
+      background: #ffffff;
+      border: 1px solid #e5e5e7;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      height: fit-content;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #1d1d1f, #333, #1d1d1f);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .project-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      border-color: #1d1d1f;
+    }
+
+    .project-card:hover::before {
+      opacity: 1;
+    }
+
+    .project-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .project-title {
+      font-size: 1.3em;
+      font-weight: 600;
+      color: #1d1d1f;
+      margin: 0;
+      text-decoration: none;
+      letter-spacing: -0.01em;
+    }
+
+    .project-title:hover {
+      color: #333;
+    }
+
+    .project-language {
+      display: flex;
+      align-items: center;
+      font-size: 0.85em;
+      color: #86868b;
+      font-weight: 500;
+    }
+
+    .language-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 8px;
+    }
+
+    .project-description {
+      color: #515154;
+      margin: 16px 0;
+      line-height: 1.6;
+      min-height: 50px;
+      font-size: 0.95em;
+    }
+
+    .project-stats {
+      display: flex;
+      gap: 20px;
+      margin: 16px 0;
+      font-size: 0.85em;
+      color: #86868b;
+    }
+
+    .stat {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 500;
+    }
+
+    .project-topics {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 16px 0;
+    }
+
+    .topic-tag {
+      background: #f5f5f7;
+      color: #1d1d1f;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.75em;
+      font-weight: 500;
+      border: 1px solid #e5e5e7;
+    }
+
+    .project-links {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .project-link {
+      background: #1d1d1f;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 0.9em;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      letter-spacing: -0.01em;
+    }
+
+    .project-link:hover {
+      background: #333;
+      transform: translateY(-1px);
+    }
+
+    .project-link.secondary {
+      background: transparent;
+      color: #1d1d1f;
+      border: 1px solid #e5e5e7;
+    }
+
+    .project-link.secondary:hover {
+      background: #f5f5f7;
+      border-color: #d2d2d7;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 60px;
+      color: #86868b;
+      font-weight: 500;
+    }
+
+    .loading::after {
+      content: "";
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #f5f5f7;
+      border-top: 2px solid #1d1d1f;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-left: 10px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .error-message {
+      background: #fff;
+      color: #d70015;
+      padding: 20px;
+      border-radius: 12px;
+      margin: 20px 0;
+      border: 1px solid #f5f5f7;
+      box-shadow: 0 4px 20px rgba(215, 0, 21, 0.1);
+    }
+
+    .github-profile {
+      background: linear-gradient(135deg, #1d1d1f 0%, #333 50%, #1d1d1f 100%);
+      color: white;
+      padding: 40px;
+      border-radius: 16px;
+      text-align: center;
+      margin-bottom: 40px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .github-profile h2 {
+      margin: 0 0 12px 0;
+      font-size: 2.2em;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    .github-profile p {
+      margin: 0;
+      opacity: 0.8;
+      font-size: 1.1em;
+      font-weight: 400;
+    }
+
+    .filter-controls {
+      margin: 30px 0;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .filter-btn {
+      background: #ffffff;
+      border: 1px solid #e5e5e7;
+      color: #1d1d1f;
+      padding: 10px 18px;
+      border-radius: 24px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      font-size: 0.9em;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+    }
+
+    .filter-btn:hover {
+      background: #f5f5f7;
+      border-color: #d2d2d7;
+      transform: translateY(-1px);
+    }
+
+    .filter-btn.active {
+      background: #1d1d1f;
+      color: white;
+      border-color: #1d1d1f;
+    }
+
+    .filter-controls span {
+      color: #1d1d1f;
+      font-weight: 600;
+      margin-right: 8px;
+    }
+
+    @media (max-width: 768px) {
+      .projects-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .project-stats {
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .filter-controls {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <nav>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="resume.html">Resume</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+  <div class="projects-container">
+    <div class="github-profile">
+      <h2>My GitHub Projects</h2>
+      <p>Scopri i miei progetti e le tecnologie che utilizzo</p>
+    </div>
+
+    <div class="filter-controls">
+      <span style="font-weight: bold;">Filtra per linguaggio:</span>
+      <button class="filter-btn active" data-language="all">Tutti</button>
+    </div>
+
+    <div id="loading" class="loading">
+      Caricamento progetti GitHub...
+    </div>
+
+    <div id="error-container"></div>
+
+    <div id="projects-grid" class="projects-grid" style="display: none;">
+      <!-- I progetti verranno inseriti qui dinamicamente -->
+    </div>
+  </div>
+</main>
+
+<footer>
+  <p>&copy; 2024 Giorgio Giaffreda. All Rights Reserved.</p>
+</footer>
+
+<script>
+  // Configurazione
+  const GITHUB_USERNAME = 'GiorgioDotcom'; // Sostituisci con il tuo username GitHub
+  const API_BASE_URL = 'https://api.github.com';
+
+  // Colori per i linguaggi di programmazione - Palette più elegante
+  const languageColors = {
+    'JavaScript': '#1d1d1f',
+    'TypeScript': '#2d3748',
+    'Python': '#1a202c',
+    'Java': '#2b2b2b',
+    'C++': '#1d1d1f',
+    'C': '#2d3748',
+    'C#': '#1a202c',
+    'HTML': '#e53e3e',
+    'CSS': '#3182ce',
+    'React': '#1d1d1f',
+    'Vue': '#38a169',
+    'PHP': '#805ad5',
+    'Ruby': '#e53e3e',
+    'Go': '#38a169',
+    'Rust': '#dd6b20',
+    'Swift': '#ed8936',
+    'Kotlin': '#805ad5',
+    'Dart': '#3182ce'
+  };
+
+  let allProjects = [];
+  let currentFilter = 'all';
+
+  // Funzione per recuperare i repository da GitHub
+  async function fetchGitHubRepos() {
+    try {
+      const response = await fetch(`${API_BASE_URL}/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=100`);
+
+      if (!response.ok) {
+        throw new Error(`Errore API GitHub: ${response.status}`);
+      }
+
+      const repos = await response.json();
+
+      // Filtra i repository (esclude i fork e quelli privati)
+      const publicRepos = repos.filter(repo => !repo.fork && !repo.private);
+
+      // Ordina per data di aggiornamento
+      publicRepos.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
+
+      return publicRepos;
+    } catch (error) {
+      console.error('Errore nel recupero dei repository:', error);
+      throw error;
+    }
+  }
+
+  // Funzione per ottenere informazioni aggiuntive sul repository
+  async function getRepoDetails(repo) {
+    try {
+      // Ottieni informazioni sui linguaggi utilizzati
+      const languagesResponse = await fetch(repo.languages_url);
+      const languages = languagesResponse.ok ? await languagesResponse.json() : {};
+
+      // Trova il linguaggio principale
+      const primaryLanguage = Object.keys(languages)[0] || repo.language || 'Unknown';
+
+      return {
+        ...repo,
+        primaryLanguage,
+        languages: Object.keys(languages)
+      };
+    } catch (error) {
+      console.error(`Errore nel recupero dettagli per ${repo.name}:`, error);
+      return {
+        ...repo,
+        primaryLanguage: repo.language || 'Unknown',
+        languages: repo.language ? [repo.language] : []
+      };
+    }
+  }
+
+  // Funzione per creare la card di un progetto
+  function createProjectCard(repo) {
+    const languageColor = languageColors[repo.primaryLanguage] || '#666';
+    const topics = repo.topics || [];
+
+    return `
+        <div class="project-card" data-language="${repo.primaryLanguage}">
+            <div class="project-header">
+                <a href="${repo.html_url}" target="_blank" class="project-title">
+                    ${repo.name}
+                </a>
+                ${repo.primaryLanguage ? `
+                <div class="project-language">
+                    <span class="language-dot" style="background-color: ${languageColor}"></span>
+                    ${repo.primaryLanguage}
+                </div>
+                ` : ''}
+            </div>
+
+            <div class="project-description">
+                ${repo.description || 'Nessuna descrizione disponibile.'}
+            </div>
+
+            <div class="project-stats">
+                <div class="stat">
+                    <span>⭐</span>
+                    <span>${repo.stargazers_count}</span>
+                </div>
+                <div class="stat">
+                    <span>🍴</span>
+                    <span>${repo.forks_count}</span>
+                </div>
+                <div class="stat">
+                    <span>👁️</span>
+                    <span>${repo.watchers_count}</span>
+                </div>
+                <div class="stat">
+                    <span>📅</span>
+                    <span>${new Date(repo.updated_at).toLocaleDateString('it-IT')}</span>
+                </div>
+            </div>
+
+            ${topics.length > 0 ? `
+            <div class="project-topics">
+                ${topics.map(topic => `<span class="topic-tag">${topic}</span>`).join('')}
+            </div>
+            ` : ''}
+
+            <div class="project-links">
+                <a href="${repo.html_url}" target="_blank" class="project-link">
+                    Visualizza su GitHub
+                </a>
+                ${repo.homepage ? `
+                <a href="${repo.homepage}" target="_blank" class="project-link secondary">
+                    Demo Live
+                </a>
+                ` : ''}
+            </div>
+        </div>
+    `;
+  }
+
+  // Funzione per creare i filtri per linguaggio
+  function createLanguageFilters(projects) {
+    const languages = [...new Set(projects.map(p => p.primaryLanguage))].filter(l => l !== 'Unknown');
+    const filterContainer = document.querySelector('.filter-controls');
+
+    // Rimuovi i filtri esistenti eccetto "Tutti"
+    const existingFilters = filterContainer.querySelectorAll('.filter-btn:not([data-language="all"])');
+    existingFilters.forEach(btn => btn.remove());
+
+    // Aggiungi nuovi filtri
+    languages.forEach(language => {
+      const btn = document.createElement('button');
+      btn.className = 'filter-btn';
+      btn.setAttribute('data-language', language);
+      btn.textContent = language;
+      btn.addEventListener('click', () => filterProjects(language));
+      filterContainer.appendChild(btn);
+    });
+  }
+
+  // Funzione per filtrare i progetti
+  function filterProjects(language) {
+    currentFilter = language;
+
+    // Aggiorna i pulsanti attivi
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-language') === language);
+    });
+
+    // Mostra/nascondi le card
+    document.querySelectorAll('.project-card').forEach(card => {
+      const cardLanguage = card.getAttribute('data-language');
+      const shouldShow = language === 'all' || cardLanguage === language;
+      card.style.display = shouldShow ? 'block' : 'none';
+    });
+  }
+
+  // Funzione per mostrare un messaggio di errore
+  function showError(message) {
+    const errorContainer = document.getElementById('error-container');
+    errorContainer.innerHTML = `
+        <div class="error-message">
+            <strong>Errore:</strong> ${message}
+            <br>
+            <small>Assicurati che il nome utente GitHub sia corretto e che i repository siano pubblici.</small>
+        </div>
+    `;
+  }
+
+  // Funzione principale per caricare e visualizzare i progetti
+  async function loadProjects() {
+    const loadingElement = document.getElementById('loading');
+    const projectsGrid = document.getElementById('projects-grid');
+
+    try {
+      // Recupera i repository
+      const repos = await fetchGitHubRepos();
+
+      if (repos.length === 0) {
+        throw new Error('Nessun repository pubblico trovato.');
+      }
+
+      // Ottieni dettagli aggiuntivi per ogni repository (limitato ai primi 20 per performance)
+      const reposToShow = repos.slice(0, 20);
+      const repoDetails = await Promise.all(
+              reposToShow.map(repo => getRepoDetails(repo))
+      );
+
+      allProjects = repoDetails;
+
+      // Genera l'HTML delle card
+      const projectsHTML = allProjects.map(repo => createProjectCard(repo)).join('');
+      projectsGrid.innerHTML = projectsHTML;
+
+      // Crea i filtri per linguaggio
+      createLanguageFilters(allProjects);
+
+      // Nascondi il loading e mostra i progetti
+      loadingElement.style.display = 'none';
+      projectsGrid.style.display = 'grid';
+
+      // Aggiungi event listener per i filtri
+      document.querySelector('.filter-btn[data-language="all"]').addEventListener('click', () => filterProjects('all'));
+
+    } catch (error) {
+      console.error('Errore nel caricamento dei progetti:', error);
+      loadingElement.style.display = 'none';
+      showError(error.message);
+    }
+  }
+
+  // Avvia il caricamento quando la pagina è pronta
+  document.addEventListener('DOMContentLoaded', loadProjects);
+</script>
+</body>
+</html>
