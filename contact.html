@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Metadati del documento -->
-  <meta charset="UTF-8"> <!-- Codifica dei caratteri -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Design responsivo -->
-  <meta name="description" content="Contact Giorgio Giaffreda"> <!-- Descrizione della pagina per SEO -->
-  <title>Contact - Giorgio Giaffreda</title> <!-- Titolo della pagina -->
-  <link rel="stylesheet" href="css/style.css"> <!-- Collegamento al file CSS per gli stili -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Contact Giorgio Giaffreda">
+  <title>Contact - Giorgio Giaffreda</title>
+  <link rel="stylesheet" href="css/style.css">
+  <!-- EmailJS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 </head>
 <body>
 <header>
-  <!-- Menu di navigazione -->
   <nav>
     <ul>
       <li><a href="index.html">Home</a></li>
@@ -24,10 +24,9 @@
 
 <main>
   <section id="contact">
-    <!-- Titolo della sezione di contatto -->
     <h2>Contact Me</h2>
 
-    <!-- Modulo di contatto -->
+    <!-- Modulo di contatto con EmailJS -->
     <form id="contactForm">
       <!-- Campo per il nome -->
       <input type="text" id="name" name="name" placeholder="Your Name" required>
@@ -35,39 +34,152 @@
       <!-- Campo per l'email -->
       <input type="email" id="email" name="email" placeholder="Your Email" required>
 
+      <!-- Campo per l'oggetto -->
+      <input type="text" id="subject" name="subject" placeholder="Subject" required>
+
       <!-- Campo per il messaggio -->
       <textarea id="message" name="message" placeholder="Your Message" required></textarea>
 
       <!-- Pulsante di invio -->
-      <button type="submit">Send</button>
+      <button type="submit" id="submitBtn">
+        <span class="btn-text">Send</span>
+        <span class="btn-loading" style="display: none;">Sending...</span>
+      </button>
     </form>
 
-    <!-- Messaggio di risposta dopo l'invio -->
+    <!-- Messaggio di risposta -->
     <div id="responseMessage"></div>
 
-    <hr> <!-- Linea di separazione -->
+    <hr>
 
     <!-- Collegamenti ai social -->
     <div class="social-links">
       <h3>Connect with me:</h3>
-      <!-- LinkedIn -->
       <a href="https://www.linkedin.com/in/giorgio-giaffreda/" target="_blank" aria-label="LinkedIn">
-        <img src="img/linkedin.png" alt="LinkedIn"> <!-- Immagine per LinkedIn -->
+        <img src="img/linkedin.png" alt="LinkedIn">
       </a>
-      <!-- GitHub -->
       <a href="https://github.com/GiorgioDotcom" target="_blank" aria-label="GitHub">
-        <img src="img/github.png" alt="GitHub"> <!-- Immagine per GitHub -->
+        <img src="img/github.png" alt="GitHub">
       </a>
     </div>
   </section>
 </main>
 
 <footer>
-  <!-- Piè di pagina -->
   <p>&copy; 2024 Giorgio Giaffreda. All Rights Reserved.</p>
 </footer>
 
-<!-- Collegamento al file JavaScript per gestire il modulo di contatto. (Nessuna gestione backend implementata. Valutarne l'inserimento)-->
-<script src="js/contact.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // Inizializza EmailJS con la tua Public Key
+    emailjs.init("_ZdoqF4GawLKJLsbL"); // Sostituisci con la tua Public Key
+
+    const form = document.getElementById("contactForm");
+    const responseMessage = document.getElementById("responseMessage");
+    const submitBtn = document.getElementById("submitBtn");
+    const btnText = submitBtn.querySelector(".btn-text");
+    const btnLoading = submitBtn.querySelector(".btn-loading");
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      // Mostra stato di caricamento
+      btnText.style.display = "none";
+      btnLoading.style.display = "inline";
+      submitBtn.disabled = true;
+
+      try {
+        // Nella funzione sendForm:
+        const result = await emailjs.sendForm(
+                'service_s5ybugh',    // Service ID
+                'template_kumwy7d',   // Template ID
+                form
+        );
+
+        // Successo
+        responseMessage.innerHTML = `
+                <div style="background: #d4edda; color: #155724; padding: 15px; border-radius: 5px; border: 1px solid #c3e6cb;">
+                    <strong>✅ Success!</strong> Your message has been sent successfully. I'll get back to you soon!
+                </div>
+            `;
+
+        // Reset del form
+        form.reset();
+
+      } catch (error) {
+        // Errore
+        console.error('EmailJS Error:', error);
+        responseMessage.innerHTML = `
+                <div style="background: #f8d7da; color: #721c24; padding: 15px; border-radius: 5px; border: 1px solid #f5c6cb;">
+                    <strong>❌ Error!</strong> Failed to send message. Please try again or contact me directly at dev@giaffredagiorgio.it
+                </div>
+            `;
+      } finally {
+        // Ripristina il pulsante
+        btnText.style.display = "inline";
+        btnLoading.style.display = "none";
+        submitBtn.disabled = false;
+      }
+    });
+  });
+</script>
+
+<style>
+  /* Stili per i messaggi di risposta */
+  #responseMessage {
+    margin: 20px 0;
+  }
+
+  #responseMessage div {
+    margin: 10px 0;
+    font-size: 1em;
+  }
+
+  /* Stili per il pulsante di invio */
+  #submitBtn {
+    position: relative;
+    transition: all 0.3s ease;
+  }
+
+  #submitBtn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+
+  /* Animazione di caricamento */
+  .btn-loading::after {
+    content: "";
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #ffffff;
+    border-top: 2px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-left: 8px;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  /* Migliora l'aspetto del form */
+  form input, form textarea {
+    transition: all 0.3s ease;
+  }
+
+  form input:focus, form textarea:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
+    transform: translateY(-1px);
+  }
+
+  form button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+</style>
 </body>
 </html>
